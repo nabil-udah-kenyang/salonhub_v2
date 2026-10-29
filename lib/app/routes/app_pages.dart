@@ -8,6 +8,14 @@ import '../modules/find_barber/bindings/find_barber_binding.dart';
 import '../modules/find_barber/views/find_barber_view.dart';
 import '../modules/barber_detail/bindings/barber_detail_binding.dart';
 import '../modules/barber_detail/views/barber_detail_view.dart';
+import '../modules/book_appointment/bindings/book_appointment_binding.dart';
+import '../modules/book_appointment/views/book_appointment_view.dart';
+import '../modules/appointment_payment/bindings/appointment_payment_binding.dart';
+import '../modules/appointment_payment/views/appointment_payment_view.dart';
+import '../modules/payment/bindings/payment_binding.dart';
+import '../modules/payment/views/payment_view.dart';
+import '../modules/invoice/bindings/invoice_binding.dart';
+import '../modules/invoice/views/invoice_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/intro_screen/bindings/intro_screen_binding.dart';
@@ -78,6 +86,26 @@ class AppPages {
       name: _Paths.BARBER_DETAIL,
       page: () => const BarberDetailView(),
       binding: BarberDetailBinding(),
+    ),
+    GetPage(
+      name: _Paths.BOOK_APPOINTMENT,
+      page: () => const BookAppointmentView(),
+      binding: BookAppointmentBinding(),
+    ),
+    GetPage(
+      name: _Paths.APPOINTMENT_PAYMENT,
+      page: () => const AppointmentPaymentView(),
+      binding: AppointmentPaymentBinding(),
+    ),
+    GetPage(
+      name: _Paths.PAYMENT,
+      page: () => const PaymentView(),
+      binding: PaymentBinding(),
+    ),
+    GetPage(
+      name: _Paths.INVOICE,
+      page: () => const InvoiceView(),
+      binding: InvoiceBinding(),
     ),
   ];
 }

@@ -13,6 +13,10 @@ abstract class Routes {
   static const EXPLORE_BARBERS = _Paths.EXPLORE_BARBERS;
   static const FIND_BARBER = _Paths.FIND_BARBER;
   static const BARBER_DETAIL = _Paths.BARBER_DETAIL;
+  static const BOOK_APPOINTMENT = _Paths.BOOK_APPOINTMENT;
+  static const APPOINTMENT_PAYMENT = _Paths.APPOINTMENT_PAYMENT;
+  static const PAYMENT = _Paths.PAYMENT;
+  static const INVOICE = _Paths.INVOICE;
 }
 
 abstract class _Paths {
@@ -27,4 +31,8 @@ abstract class _Paths {
   static const EXPLORE_BARBERS = '/explore-barbers';
   static const FIND_BARBER = '/find-barber';
   static const BARBER_DETAIL = '/barber-detail';
+  static const BOOK_APPOINTMENT = '/book-appointment';
+  static const APPOINTMENT_PAYMENT = '/appointment-payment';
+  static const PAYMENT = '/payment';
+  static const INVOICE = '/invoice';
 }

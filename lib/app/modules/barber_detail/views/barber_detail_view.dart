@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:salonhub_v2/app/constant/theme.dart';
+import 'package:salonhub_v2/app/routes/app_pages.dart';
 import 'package:salonhub_v2/app/widgets/barber_detail_quick_action.dart';
 import 'package:salonhub_v2/app/widgets/barber_detail_tab.dart';
 import 'package:salonhub_v2/app/widgets/barber_review_item.dart';
@@ -275,7 +276,7 @@ class BarberDetailView extends GetView<BarberDetailController> {
       width: double.infinity,
       height: 44,
       child: FilledButton(
-        onPressed: controller.bookNow,
+        onPressed: () => Get.toNamed(Routes.BOOK_APPOINTMENT),
         style: FilledButton.styleFrom(
           backgroundColor: AppColors.primary900,
           foregroundColor: AppColors.white,
