@@ -38,6 +38,7 @@ class HomeView extends GetView<HomeController> {
                   barber: barber,
                   showBooking: false,
                   showBorder: false,
+                  onTap: () => Get.toNamed(Routes.BARBER_DETAIL),
                 ),
               ),
               Center(
@@ -78,6 +79,7 @@ class HomeView extends GetView<HomeController> {
               HomeRecommendedSection(
                 barbers: controller.recommendedBarbers,
                 onSeeAll: controller.openRecommendedBarbers,
+                onBarberTap: () => Get.toNamed(Routes.BARBER_DETAIL),
               ),
               const SizedBox(height: 6),
               HomeSectionHeader(

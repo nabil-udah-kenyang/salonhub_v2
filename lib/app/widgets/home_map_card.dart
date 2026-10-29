@@ -49,7 +49,10 @@ class HomeMapCard extends StatelessWidget {
                       point: point,
                       width: 36,
                       height: 36,
-                      child: const _MapMarker(),
+                      child: GestureDetector(
+                        onTap: () => Get.toNamed(Routes.BARBER_DETAIL),
+                        child: const _MapMarker(),
+                      ),
                     ),
                   ),
                   Marker(

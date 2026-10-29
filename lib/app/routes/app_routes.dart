@@ -12,6 +12,7 @@ abstract class Routes {
   static const REGISTER_SCREEN = _Paths.REGISTER_SCREEN;
   static const EXPLORE_BARBERS = _Paths.EXPLORE_BARBERS;
   static const FIND_BARBER = _Paths.FIND_BARBER;
+  static const BARBER_DETAIL = _Paths.BARBER_DETAIL;
 }
 
 abstract class _Paths {
@@ -25,4 +26,5 @@ abstract class _Paths {
   static const REGISTER_SCREEN = '/register-screen';
   static const EXPLORE_BARBERS = '/explore-barbers';
   static const FIND_BARBER = '/find-barber';
+  static const BARBER_DETAIL = '/barber-detail';
 }

@@ -65,7 +65,7 @@ class HomePromoCard extends StatelessWidget {
                   ),
                 ),
                 child: Text(
-                  'Pesan Sekarang',
+                  'Booking Now',
                   maxLines: 1,
                   style: AppTextStyles.caption2.copyWith(
                     color: AppColors.white,

@@ -4,7 +4,12 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:salonhub_v2/app/constant/theme.dart';
-import 'package:salonhub_v2/app/models/barber.dart';
+import 'package:salonhub_v2/app/routes/app_pages.dart';
+import 'package:salonhub_v2/app/widgets/current_location_marker.dart';
+import 'package:salonhub_v2/app/widgets/find_back_icon.dart';
+import 'package:salonhub_v2/app/widgets/find_barber_marker.dart';
+import 'package:salonhub_v2/app/widgets/nearby_barber_card.dart';
+import 'package:salonhub_v2/app/widgets/recent_search_item.dart';
 
 import '../controllers/find_barber_controller.dart';
 
@@ -49,7 +54,7 @@ class FindBarberView extends GetView<FindBarberController> {
             onPressed: Get.back,
             padding: EdgeInsets.zero,
             constraints: const BoxConstraints(minWidth: 32, minHeight: 40),
-            icon: const _BackIcon(),
+            icon: const FindBackIcon(),
           ),
           const SizedBox(width: 14),
           Text(
@@ -108,8 +113,11 @@ class FindBarberView extends GetView<FindBarberController> {
                       width: 42,
                       height: 42,
                       child: GestureDetector(
-                        onTap: () => controller.selectMarker(index),
-                        child: _BarberMarker(
+                        onTap: () {
+                          controller.selectMarker(index);
+                          Get.toNamed(Routes.BARBER_DETAIL);
+                        },
+                        child: FindBarberMarker(
                           active: controller.selectedMarker.value == index,
                         ),
                       ),
@@ -119,7 +127,7 @@ class FindBarberView extends GetView<FindBarberController> {
                     point: controller.currentLocation,
                     width: 26,
                     height: 26,
-                    child: const _CurrentLocationMarker(),
+                    child: const CurrentLocationMarker(),
                   ),
                 ],
               ),
@@ -366,8 +374,9 @@ class FindBarberView extends GetView<FindBarberController> {
               itemCount: controller.nearbyBarbers.length,
               separatorBuilder: (_, index) => const SizedBox(width: 12),
               itemBuilder: (context, index) {
-                return _NearbyBarberCard(
+                return NearbyBarberCard(
                   barber: controller.nearbyBarbers[index],
+                  onTap: () => Get.toNamed(Routes.BARBER_DETAIL),
                 );
               },
             ),
@@ -406,7 +415,7 @@ class FindBarberView extends GetView<FindBarberController> {
           else
             ...List.generate(
               controller.filteredRecentSearches.length,
-              (index) => _RecentSearchItem(
+              (index) => RecentSearchItem(
                 name: controller.filteredRecentSearches[index].name,
                 address: controller.filteredRecentSearches[index].address,
                 selected: controller.selectedRecentSearch.value == index,
@@ -445,239 +454,6 @@ class FindBarberView extends GetView<FindBarberController> {
           ),
         ],
       ),
-    );
-  }
-}
-
-class _BarberMarker extends StatelessWidget {
-  const _BarberMarker({required this.active});
-
-  final bool active;
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 180),
-      width: active ? 42 : 38,
-      height: active ? 42 : 38,
-      alignment: Alignment.center,
-      decoration: BoxDecoration(
-        color: active ? AppColors.primary900 : AppColors.secondary900,
-        shape: BoxShape.circle,
-        border: Border.all(color: AppColors.white, width: 2),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x330F172A),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: SvgPicture.asset(
-        'lib/assets/icons/Shop.svg',
-        width: 25,
-        height: 25,
-      ),
-    );
-  }
-}
-
-class _CurrentLocationMarker extends StatelessWidget {
-  const _CurrentLocationMarker();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: BoxDecoration(
-        color: AppColors.blue500,
-        shape: BoxShape.circle,
-        border: Border.all(color: AppColors.white, width: 3),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x440F172A),
-            blurRadius: 5,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _NearbyBarberCard extends StatelessWidget {
-  const _NearbyBarberCard({required this.barber});
-
-  final Barber barber;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      width: 290,
-      padding: const EdgeInsets.all(8),
-      decoration: BoxDecoration(
-        color: AppColors.blueGray50,
-        borderRadius: BorderRadius.circular(9),
-        boxShadow: const [
-          BoxShadow(
-            color: Color(0x140F172A),
-            blurRadius: 6,
-            offset: Offset(0, 2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(7),
-            child: Image.asset(
-              barber.image,
-              width: 76,
-              height: 76,
-              fit: BoxFit.cover,
-            ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  barber.name,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.subHeadline3.copyWith(
-                    color: AppColors.blueGray900,
-                    fontWeight: FontWeight.w700,
-                  ),
-                ),
-                const SizedBox(height: 5),
-                _MetaLine(
-                  iconAsset: 'lib/assets/icons/Map Point.svg',
-                  text: '${barber.description} (${barber.distance})',
-                ),
-                const SizedBox(height: 5),
-                _MetaLine(
-                  iconAsset: 'lib/assets/icons/Star.svg',
-                  text: '${barber.rating}  (24)',
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
-
-class _MetaLine extends StatelessWidget {
-  const _MetaLine({required this.iconAsset, required this.text});
-
-  final String iconAsset;
-  final String text;
-
-  @override
-  Widget build(BuildContext context) {
-    return Row(
-      children: [
-        SvgPicture.asset(iconAsset, width: 14, height: 14),
-        const SizedBox(width: 5),
-        Expanded(
-          child: Text(
-            text,
-            maxLines: 1,
-            overflow: TextOverflow.ellipsis,
-            style: AppTextStyles.caption1.copyWith(color: AppColors.primary500),
-          ),
-        ),
-      ],
-    );
-  }
-}
-
-class _RecentSearchItem extends StatelessWidget {
-  const _RecentSearchItem({
-    required this.name,
-    required this.address,
-    required this.selected,
-    required this.onTap,
-  });
-
-  final String name;
-  final String address;
-  final bool selected;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) {
-    return InkWell(
-      onTap: onTap,
-      borderRadius: BorderRadius.circular(8),
-      child: Container(
-        margin: const EdgeInsets.only(bottom: 10),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 11),
-        decoration: BoxDecoration(
-          color: selected ? AppColors.blueGray100 : Colors.transparent,
-          border: selected
-              ? Border.all(color: AppColors.primary900, width: 1.5)
-              : null,
-          borderRadius: BorderRadius.circular(8),
-        ),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(top: 2),
-              child: SvgPicture.asset(
-                'lib/assets/icons/Map Point.svg',
-                width: 17,
-                height: 17,
-              ),
-            ),
-            const SizedBox(width: 7),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    name,
-                    style: AppTextStyles.subHeadline2.copyWith(
-                      color: AppColors.blueGray900,
-                      fontWeight: FontWeight.w700,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Text(
-                    address,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    style: AppTextStyles.body3.copyWith(
-                      color: AppColors.blueGray500,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _BackIcon extends StatelessWidget {
-  const _BackIcon();
-
-  @override
-  Widget build(BuildContext context) {
-    return SvgPicture.string(
-      '''
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-  <path d="M19 12H5M5 12L11 6M5 12L11 18" stroke="#0F172A" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-</svg>
-''',
-      width: 24,
-      height: 24,
     );
   }
 }

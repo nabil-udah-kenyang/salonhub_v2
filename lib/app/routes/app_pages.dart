@@ -6,6 +6,8 @@ import '../modules/explore_barbers/bindings/explore_barbers_binding.dart';
 import '../modules/explore_barbers/views/explore_barbers_view.dart';
 import '../modules/find_barber/bindings/find_barber_binding.dart';
 import '../modules/find_barber/views/find_barber_view.dart';
+import '../modules/barber_detail/bindings/barber_detail_binding.dart';
+import '../modules/barber_detail/views/barber_detail_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/intro_screen/bindings/intro_screen_binding.dart';
@@ -71,6 +73,11 @@ class AppPages {
       name: _Paths.FIND_BARBER,
       page: () => const FindBarberView(),
       binding: FindBarberBinding(),
+    ),
+    GetPage(
+      name: _Paths.BARBER_DETAIL,
+      page: () => const BarberDetailView(),
+      binding: BarberDetailBinding(),
     ),
   ];
 }

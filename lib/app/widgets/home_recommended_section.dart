@@ -8,10 +8,12 @@ class HomeRecommendedSection extends StatefulWidget {
     super.key,
     required this.barbers,
     this.onSeeAll,
+    this.onBarberTap,
   });
 
   final List<Barber> barbers;
   final VoidCallback? onSeeAll;
+  final VoidCallback? onBarberTap;
 
   @override
   State<HomeRecommendedSection> createState() => _HomeRecommendedSectionState();
@@ -60,14 +62,22 @@ class _HomeRecommendedSectionState extends State<HomeRecommendedSection> {
               setState(() => _selectedPage = index);
             },
             itemBuilder: (context, index) {
-              return _FeaturedBarberCard(barber: widget.barbers[index]);
+              return _FeaturedBarberCard(
+                barber: widget.barbers[index],
+                onTap: widget.onBarberTap,
+              );
             },
           ),
         ),
         const SizedBox(height: 8),
         _buildPageIndicator(),
         const SizedBox(height: 14),
-        ...widget.barbers.skip(1).map(_RecommendedBarberItem.new),
+        ...widget.barbers
+            .skip(1)
+            .map(
+              (barber) =>
+                  _RecommendedBarberItem(barber, onTap: widget.onBarberTap),
+            ),
         const SizedBox(height: 2),
         Center(
           child: OutlinedButton(
@@ -126,131 +136,141 @@ class _HomeRecommendedSectionState extends State<HomeRecommendedSection> {
 }
 
 class _FeaturedBarberCard extends StatelessWidget {
-  const _FeaturedBarberCard({required this.barber});
+  const _FeaturedBarberCard({required this.barber, this.onTap});
 
   final Barber barber;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ClipRRect(
-          borderRadius: BorderRadius.circular(8),
-          child: SizedBox(
-            height: 198,
-            width: double.infinity,
-            child: Stack(
-              fit: StackFit.expand,
-              children: [
-                Container(color: AppColors.blueGray100),
-                Image.asset(barber.image, fit: BoxFit.cover),
-                Positioned(
-                  right: 0,
-                  bottom: 0,
-                  child: Container(
-                    height: 40,
-                    padding: const EdgeInsets.symmetric(horizontal: 14),
-                    decoration: const BoxDecoration(
-                      color: AppColors.primary900,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(8),
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          ClipRRect(
+            borderRadius: BorderRadius.circular(8),
+            child: SizedBox(
+              height: 198,
+              width: double.infinity,
+              child: Stack(
+                fit: StackFit.expand,
+                children: [
+                  Container(color: AppColors.blueGray100),
+                  Image.asset(barber.image, fit: BoxFit.cover),
+                  Positioned(
+                    right: 0,
+                    bottom: 0,
+                    child: Container(
+                      height: 40,
+                      padding: const EdgeInsets.symmetric(horizontal: 14),
+                      decoration: const BoxDecoration(
+                        color: AppColors.primary900,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(8),
+                        ),
+                      ),
+                      child: Row(
+                        children: [
+                          Text(
+                            'Pesan',
+                            style: AppTextStyles.caption1.copyWith(
+                              color: AppColors.white,
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          const Icon(
+                            Icons.calendar_today_outlined,
+                            size: 15,
+                            color: AppColors.white,
+                          ),
+                        ],
                       ),
                     ),
-                    child: Row(
-                      children: [
-                        Text(
-                          'Pesan',
-                          style: AppTextStyles.caption1.copyWith(
-                            color: AppColors.white,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(width: 8),
-                        const Icon(
-                          Icons.calendar_today_outlined,
-                          size: 15,
-                          color: AppColors.white,
-                        ),
-                      ],
-                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
-        ),
-        const SizedBox(height: 10),
-        Text(
-          barber.name,
-          maxLines: 2,
-          overflow: TextOverflow.ellipsis,
-          style: AppTextStyles.subHeadline3.copyWith(
-            color: AppColors.coolGray900,
-            fontWeight: FontWeight.w700,
+          const SizedBox(height: 10),
+          Text(
+            barber.name,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
+            style: AppTextStyles.subHeadline3.copyWith(
+              color: AppColors.coolGray900,
+              fontWeight: FontWeight.w700,
+            ),
           ),
-        ),
-        const SizedBox(height: 4),
-        _InfoRow(
-          icon: Icons.location_on,
-          text: '${barber.description} (${barber.distance})',
-        ),
-        const SizedBox(height: 3),
-        _InfoRow(iconAsset: 'lib/assets/icons/Star.svg', text: barber.rating),
-      ],
+          const SizedBox(height: 4),
+          _InfoRow(
+            icon: Icons.location_on,
+            text: '${barber.description} (${barber.distance})',
+          ),
+          const SizedBox(height: 3),
+          _InfoRow(iconAsset: 'lib/assets/icons/Star.svg', text: barber.rating),
+        ],
+      ),
     );
   }
 }
 
 class _RecommendedBarberItem extends StatelessWidget {
-  const _RecommendedBarberItem(this.barber);
+  const _RecommendedBarberItem(this.barber, {this.onTap});
 
   final Barber barber;
+  final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 14),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.asset(
-              barber.image,
-              width: 92,
-              height: 92,
-              fit: BoxFit.cover,
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(8),
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 14),
+        child: Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(8),
+              child: Image.asset(
+                barber.image,
+                width: 92,
+                height: 92,
+                fit: BoxFit.cover,
+              ),
             ),
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  barber.name,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  style: AppTextStyles.subHeadline3.copyWith(
-                    color: AppColors.coolGray900,
-                    fontWeight: FontWeight.w700,
+            const SizedBox(width: 10),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    barber.name,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTextStyles.subHeadline3.copyWith(
+                      color: AppColors.coolGray900,
+                      fontWeight: FontWeight.w700,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 5),
-                _InfoRow(
-                  icon: Icons.location_on,
-                  text: '${barber.description} (${barber.distance})',
-                ),
-                const SizedBox(height: 4),
-                _InfoRow(
-                  iconAsset: 'lib/assets/icons/Star.svg',
-                  text: barber.rating,
-                ),
-              ],
+                  const SizedBox(height: 5),
+                  _InfoRow(
+                    icon: Icons.location_on,
+                    text: '${barber.description} (${barber.distance})',
+                  ),
+                  const SizedBox(height: 4),
+                  _InfoRow(
+                    iconAsset: 'lib/assets/icons/Star.svg',
+                    text: barber.rating,
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
